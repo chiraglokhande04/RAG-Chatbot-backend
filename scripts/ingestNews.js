@@ -8,23 +8,38 @@ const fs = require("fs-extra");
 const path = require("path");
 
 const OUTPUT_FILE = path.resolve("news_articles.jsonl");
-const MAX_ARTICLES = 50;       // change if you want more
-const PER_FEED_LIMIT = 20;     // how many items to try per feed
+const MAX_ARTICLES = 60;       // change if you want more
+const PER_FEED_LIMIT = 12;     // how many items to try per feed
+
+// const FEEDS = [
+//   // 🇮🇳 India-Focused (60%)
+//   "https://www.thehindu.com/news/national/feeder/default.rss",
+//   "https://timesofindia.indiatimes.com/rssfeeds/-2128936835.cms",
+//   "https://indianexpress.com/section/india/feed/",
+//   "https://economictimes.indiatimes.com/rssfeeds/1977021501.cms",
+//   "https://www.business-standard.com/rss/home_page_top_stories.rss",
+//   "https://gadgets.ndtv.com/rss/news",
+//   "https://www.downtoearth.org.in/rss/science.xml",
+//   "https://www.espn.in/espn/rss/news",
+
+//   // 🌍 World-Focused (40%)
+//   "https://feeds.bbci.co.uk/news/world/rss.xml",
+//   "https://feeds.reuters.com/Reuters/worldNews",
+//   "https://www.ft.com/?format=rss",
+//   "https://techcrunch.com/feed/",
+//   "https://www.nationalgeographic.com/content/natgeo/en_us/rss/index.rss"
+// ];
+
 
 const FEEDS = [
-  "https://feeds.bbci.co.uk/news/rss.xml",
-  "https://rss.cnn.com/rss/edition.rss",
-  "https://feeds.reuters.com/Reuters/worldNews",
-  "https://www.aljazeera.com/xml/rss/all.xml",
-  "https://www.theguardian.com/world/rss",
-  "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
-  "https://feeds.bbci.co.uk/news/business/rss.xml",
-  "https://rss.cnn.com/rss/money_news_international.rss",
-  "https://feeds.reuters.com/reuters/businessNews",
-  "https://techcrunch.com/feed/",
-  "https://www.theverge.com/rss/index.xml"
-  // add more feeds if needed
-];
+    "https://www.thehindu.com/news/national/feeder/default.rss", // India
+  "https://economictimes.indiatimes.com/rssfeeds/1977021501.cms", // India Business
+  "https://techcrunch.com/feed/", // Tech
+  "https://www.espn.in/espn/rss/news",
+    "https://feeds.bbci.co.uk/news/world/rss.xml",
+
+]
+
 
 const parser = new RSSParser();
 const USER_AGENT = "VooshAssignmentIngestBot/0.1 (+your-email@example.com)";

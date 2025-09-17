@@ -44,7 +44,7 @@ router.get("/session/:sessionId/history", async (req, res) => {
     const raw = await redisClient.lrange(key, 0, -1);
     const history = raw.map((r) => {
       try { return JSON.parse(r); } catch (_) { return r; }
-    }).reverse(); // newest last -> return chronological
+    }); // newest last -> return chronological
     res.json({ history });
   } catch (err) {
     console.error("get history error:", err);
@@ -75,6 +75,8 @@ router.post("/chat", async (req, res) => {
     // 1) append user message to session history (optimistic)
     const key = `session:${sessionId}:history`;
     const userTurn = { role: "user", text: message, ts: Date.now() };
+   
+
     await redisClient.rpush(key, JSON.stringify(userTurn));
     await redisClient.expire(key, HISTORY_TTL_SECONDS);
 
@@ -105,7 +107,13 @@ router.post("/chat", async (req, res) => {
     const answer = await generateAnswer(prompt);
 
     // 7) append assistant turn to history
-    const assistantTurn = { role: "assistant", text: answer, ts: Date.now(), sources: contexts.map(c => c.metadata?.url).filter(Boolean) };
+     const sources = contexts.map((c) => ({
+  title: c.metadata?.title,
+  url: c.metadata?.url,
+  score: c.score
+}));
+
+const assistantTurn = { role: "assistant", text: answer, ts: Date.now(), sources };
     await redisClient.rpush(key, JSON.stringify(assistantTurn));
     await redisClient.expire(key, HISTORY_TTL_SECONDS);
 

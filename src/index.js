@@ -8,9 +8,20 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const chatRoutes = require("./routes/chat.js");
+const cors = require("cors");
 require("dotenv").config();
 
+
+
+
 const app = express();
+
+app.use(cors({
+  origin: "http://localhost:5173", // or "*" to allow all
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
 app.use(bodyParser.json({ limit: "1mb" }));
 app.use("/api", chatRoutes);
 
