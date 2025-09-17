@@ -17,7 +17,7 @@ require("dotenv").config();
 const app = express();
 
 app.use(cors({
-  origin: "http://localhost:5173", // or "*" to allow all
+  origin:[ "http://localhost:5173","rag-chatbot-frontend-mu.vercel.app"], // or "*" to allow all
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
