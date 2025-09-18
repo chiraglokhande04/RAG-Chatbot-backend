@@ -1,5 +1,4 @@
-// backend/scripts/ingestNews.js
-// Run: node scripts/ingestNews.js
+
 const RSSParser = require("rss-parser");
 const axios = require("axios");
 const cheerio = require("cheerio");
@@ -8,27 +7,8 @@ const fs = require("fs-extra");
 const path = require("path");
 
 const OUTPUT_FILE = path.resolve("news_articles.jsonl");
-const MAX_ARTICLES = 60;       // change if you want more
-const PER_FEED_LIMIT = 12;     // how many items to try per feed
-
-// const FEEDS = [
-//   // 🇮🇳 India-Focused (60%)
-//   "https://www.thehindu.com/news/national/feeder/default.rss",
-//   "https://timesofindia.indiatimes.com/rssfeeds/-2128936835.cms",
-//   "https://indianexpress.com/section/india/feed/",
-//   "https://economictimes.indiatimes.com/rssfeeds/1977021501.cms",
-//   "https://www.business-standard.com/rss/home_page_top_stories.rss",
-//   "https://gadgets.ndtv.com/rss/news",
-//   "https://www.downtoearth.org.in/rss/science.xml",
-//   "https://www.espn.in/espn/rss/news",
-
-//   // 🌍 World-Focused (40%)
-//   "https://feeds.bbci.co.uk/news/world/rss.xml",
-//   "https://feeds.reuters.com/Reuters/worldNews",
-//   "https://www.ft.com/?format=rss",
-//   "https://techcrunch.com/feed/",
-//   "https://www.nationalgeographic.com/content/natgeo/en_us/rss/index.rss"
-// ];
+const MAX_ARTICLES = 60;      
+const PER_FEED_LIMIT = 12;     
 
 
 const FEEDS = [
@@ -47,7 +27,7 @@ const USER_AGENT = "VooshAssignmentIngestBot/0.1 (+your-email@example.com)";
 function extractTextFromHtml(html) {
   const $ = cheerio.load(html);
 
-  // 1) try to find <article> tag and gather <p> inside it
+
   const articleTag = $("article");
   let paragraphs = [];
   if (articleTag.length) {
@@ -57,7 +37,6 @@ function extractTextFromHtml(html) {
     });
   }
 
-  // 2) fallback: common content selectors (works for many sites)
   if (!paragraphs.length) {
     const selectors = [
       "div[itemprop='articleBody'] p",
@@ -77,7 +56,7 @@ function extractTextFromHtml(html) {
     }
   }
 
-  // 3) last fallback: take longest <p> blocks from the page
+
   if (!paragraphs.length) {
     let ptexts = [];
     $("p").each((_, p) => {
